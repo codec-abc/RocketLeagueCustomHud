@@ -33,6 +33,9 @@ class RLCustomHud: public BakkesMod::Plugin::BakkesModPlugin, public BakkesMod::
 
 	bool isWindowOpen_ = false;
 	std::string menuTitle_ = "RLCustomHud";
+	std::vector<ImVec2> pointsLeftAirRoll;
+	std::vector<ImVec2> pointsRightAirRoll;
+	ControllerInput inputs;
 
 public:
 	//void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu
@@ -42,6 +45,8 @@ public:
 	void onUnload() override;
 
 	void onTick(std::string eventName);
+
+	void OnSetInput(CarWrapper cw, void* params);
 
 	void Render() override;
 

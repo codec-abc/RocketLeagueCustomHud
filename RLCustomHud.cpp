@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "RLCustomHud.h"
+#include <cmath>
 
-BAKKESMOD_PLUGIN(RLCustomHud, "RL Custom Hud", plugin_version, PLUGINTYPE_FREEPLAY)
+BAKKESMOD_PLUGIN(RLCustomHud, "RL Custom Hud", plugin_version, 0)
 
 std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 
@@ -14,20 +15,48 @@ void RLCustomHud::onLoad()
 		}, 1);
 
 	gameWrapper->HookEvent("Function Engine.GameViewportClient.Tick", bind(&RLCustomHud::OnTick, this, std::placeholders::_1));
+	gameWrapper->HookEventWithCaller<CarWrapper>("Function TAGame.Car_TA.SetVehicleInput", 
+		std::bind(&RLCustomHud::OnSetInput, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 void RLCustomHud::RenderWindow()
 {
-	if (gameWrapper->IsInGame())
+	//if (gameWrapper->IsInGame())
+	//{
+	//	//auto server = gameWrapper->GetCurrentGameState();
+	//	//if (!server.IsNull()) {
+	//	//	if (!server.GetbMatchEnded()) {
+	//	//		//inputs = gameWrapper->GetPlayerController().GetVehicleInput();
+	//	//		this->RenderImGui();
+	//	//	}
+	//	//}
+
+	//	//this->RenderImGui();
+	//}
+
+	if (gameWrapper->IsInGame() || gameWrapper->IsInCustomTraining() || gameWrapper->IsInOnlineGame() || gameWrapper->IsInOnlineGame())
 	{
-		auto server = gameWrapper->GetCurrentGameState();
-		if (!server.IsNull()) {
-			if (!server.GetbMatchEnded()) {
-				this->RenderImGui();
-			}
-		}
+		this->RenderImGui();
 	}
+
 }
+
+void RLCustomHud::OnSetInput(CarWrapper cw, void* params)
+{
+	//if (!gameWrapper->IsInGame()) 
+	//{
+	//	return;
+	//}
+
+	if (params == nullptr)
+	{
+		return;
+	}
+
+	ControllerInput* ci = (ControllerInput*)params;
+	inputs = (ControllerInput)*ci;
+}
+
 
 
 void RLCustomHud::OnTick(std::string eventName)
@@ -35,11 +64,20 @@ void RLCustomHud::OnTick(std::string eventName)
 	//std::ofstream outfile;
 	//outfile.open("C:\\Users\\camille\\Desktop\\perso\\rlLogs.txt", std::ios_base::app); // append instead of overwrite
 	//outfile << "OnTick" << std::endl;
+	//if (gameWrapper.)
+
+	CarWrapper car = gameWrapper->GetLocalCar();
+
+	if (!car.IsNull()) {
+		inputs = car.GetInput();
+	}
+
+
 }
 
 void RLCustomHud::RenderImGui()
 {
-	//const auto inputs = gameWrapper->GetPlayerController().GetVehicleInput();
+
 	//const auto directionalAirRoll = gameWrapper->IsKeyPressed(airRollKeyIndex);
 
 	// Compute time since registering started
@@ -51,13 +89,16 @@ void RLCustomHud::RenderImGui()
 
 	ImGui::SetNextWindowPos(ImVec2(128, 128), ImGuiCond_FirstUseEver);
 
-	float windowHeight = 156 * scale;
+	//float windowHeight = 156 * scale;
 
 	//if (!titleBar) {
-		windowHeight -= ImGui::GetFrameHeight();
+		//windowHeight -= ImGui::GetFrameHeight();
 	//}
 
-	ImVec2 windowSize = ImVec2(216 * scale, windowHeight);
+	//ImVec2 windowSize = ImVec2(216 * scale, windowHeight);
+	int windowWith = 800;
+	int windowHeight = 800;
+	ImVec2 windowSize = ImVec2(windowWith, windowHeight);
 
 	if (size == 1) 
 	{
@@ -87,24 +128,68 @@ void RLCustomHud::RenderImGui()
 	}
 
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
-
 	ImVec2 p = ImGui::GetCursorScreenPos();
 
-	p.x += 12 * scale;
+	//if (inputs != nullptr)
+	{
+		float thickness = 10;
+		float gap = windowWith * 0.05f;
+		float arcSize = windowWith * 0.2f;
+		pointsLeftAirRoll.clear();
+		pointsRightAirRoll.clear();
+		ImVec2 middleCross = ImVec2(p.x + 2 * gap + arcSize, p.y + windowHeight / 2);
+		ImVec2 startLeftAirRoll = ImVec2(middleCross.x, middleCross.y);
+		ImVec2 startRightAirRoll = ImVec2(middleCross.x, middleCross.y);
+		for (float i = 0; i < 90; i++)
+		{
+			float x = cos(i * 3.14159f / 180.0f);
+			float alternateX = 1.0 - x;
+			float y = sin(i * 3.14159f / 180.0f);
+			pointsLeftAirRoll.push_back(ImVec2(
+				startLeftAirRoll.x + x * arcSize + gap,
+				startLeftAirRoll.y - y * arcSize - gap));
+			pointsRightAirRoll.push_back(ImVec2(
+				startRightAirRoll.x + alternateX * arcSize - arcSize - gap,
+				startRightAirRoll.y - y * arcSize - gap));
+		}
+		drawList->AddPolyline(&pointsLeftAirRoll.front(), pointsLeftAirRoll.size(), 0xffffffff, false, thickness);
+		drawList->AddPolyline(&pointsRightAirRoll.front(), pointsRightAirRoll.size(), 0xffffffff, false, thickness);
+		drawList->AddLine(ImVec2(middleCross.x + gap, middleCross.y), ImVec2(middleCross.x + gap + arcSize, middleCross.y), 0xffffffff, thickness);
+		drawList->AddLine(ImVec2(middleCross.x - gap, middleCross.y), ImVec2(middleCross.x - gap - arcSize, middleCross.y), 0xffffffff, thickness);
+		drawList->AddLine(ImVec2(middleCross.x, middleCross.y + gap), ImVec2(middleCross.x, middleCross.y + gap + arcSize), 0xffffffff, thickness);
+		drawList->AddLine(ImVec2(middleCross.x, middleCross.y - gap), ImVec2(middleCross.x, middleCross.y - gap - arcSize), 0xffffffff, thickness);
+		drawList->AddLine(
+			ImVec2(middleCross.x + 2 * gap + arcSize, middleCross.y),
+			ImVec2(middleCross.x + 2 * gap + arcSize, middleCross.y + arcSize + 2 * gap), 0xffffffff, thickness);
+		ImGui::SetCursorPos(ImVec2((size == 0 ? cursorPosition.x + 73 : cursorPosition.x + 156), cursorPosition.y + 8 * scale));
 
-	float buttonWidth = 48 * scale, buttonHeight = 16 * scale;
+		float labelPosition = middleCross.x + 3 * gap + arcSize;
+		int backgroundColor = 0x33;
 
-	ImVec2 buttonLBPosition = ImVec2(p.x, p.y);
-	ImVec2 buttonRBPosition = ImVec2(p.x + 128 * scale, p.y);
+		ImColor jumpColor = ImColor(backgroundColor, 0xff, backgroundColor, 0xff);
+		if (inputs.Jump == 0)
+		{
+			jumpColor = ImColor(backgroundColor, backgroundColor, backgroundColor, 0xff);
+		}
+		drawList->AddText(ImVec2(labelPosition, p.y + 2.0f * windowHeight / 5.0f), jumpColor, "JUMP");
+		drawList->AddText(ImVec2(labelPosition, p.y + 2.5f * windowHeight / 5.0f), 0xffffffff, std::to_string(inputs.Jump).c_str());
 
-	float leftStickRadius = 32 * scale;
-	float buttonRadius = 12 * scale;
-	ImVec2 leftStickCenter = ImVec2(p.x + leftStickRadius, p.y + leftStickRadius);
-	ImVec2 buttonsCenter = ImVec2(leftStickCenter.x + 1 * scale, leftStickCenter.y);
-	ImVec2 buttonPosition = ImVec2(buttonsCenter.x, buttonsCenter.y + buttonRadius * 2);
-	drawList->AddCircle(buttonPosition, buttonRadius, WHITE, 32, 2 * scale);
-	drawList->AddText(buttonPosition, 0xffffffff, "Pouet");
-	ImGui::SetCursorPos(ImVec2((size == 0 ? cursorPosition.x + 73 : cursorPosition.x + 156), cursorPosition.y + 8 * scale));
+		ImColor boostColor = ImColor(backgroundColor, backgroundColor, 0xff, 0xff);
+		if (inputs.ActivateBoost == 0)
+		{
+			boostColor = ImColor(backgroundColor, backgroundColor, backgroundColor, 0xff);
+		}
+		drawList->AddText(ImVec2(labelPosition, p.y + 3.0f * windowHeight / 5.0f), boostColor, "BOOST");
+		drawList->AddText(ImVec2(labelPosition, p.y + 3.5f * windowHeight / 5.0f), 0xffffffff, std::to_string(inputs.ActivateBoost).c_str());
+
+		ImColor powerSlideColor = ImColor(0xff, backgroundColor, backgroundColor, 0xff);
+		if (inputs.Handbrake == 0)
+		{
+			powerSlideColor = ImColor(backgroundColor, backgroundColor, backgroundColor, 0xff);
+		}
+		drawList->AddText(ImVec2(labelPosition, p.y + 4.0f * windowHeight / 5.0f), powerSlideColor, "POWERSLIDE");
+		drawList->AddText(ImVec2(labelPosition, p.y + 4.5f * windowHeight / 5.0f), 0xffffffff, std::to_string(inputs.Handbrake).c_str());
+	}
 
 	if (size == 1) {
 		ImGui::PopFont();
