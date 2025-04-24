@@ -134,6 +134,9 @@
     <ClInclude Include="logging.h">
       <Filter>Plugin\header</Filter>
     </ClInclude>
+    <ClInclude Include="colormap.h">
+      <Filter>Plugin\header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RLCustomHud.rc">

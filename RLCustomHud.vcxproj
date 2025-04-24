@@ -110,6 +110,7 @@
     <ClCompile Include="RLCustomHud.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="colormap.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imguivariouscontrols.h" />

@@ -3,6 +3,7 @@
 #include "bakkesmod/plugin/bakkesmodplugin.h"
 #include "bakkesmod/plugin/pluginwindow.h"
 #include "bakkesmod/plugin/PluginSettingsWindow.h"
+#include "colormap.h"
 
 #include "version.h"
 constexpr auto plugin_version = stringify(VERSION_MAJOR) "." stringify(VERSION_MINOR) "." stringify(VERSION_PATCH) "." stringify(VERSION_BUILD);
@@ -35,6 +36,7 @@ class RLCustomHud: public BakkesMod::Plugin::BakkesModPlugin, public BakkesMod::
 	std::string menuTitle_ = "RLCustomHud";
 	std::vector<ImVec2> pointsLeftAirRoll;
 	std::vector<ImVec2> pointsRightAirRoll;
+	std::vector<ImColor> colormap;
 	ControllerInput inputs;
 
 public:
