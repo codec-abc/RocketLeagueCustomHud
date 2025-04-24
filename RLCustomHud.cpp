@@ -9,10 +9,17 @@ std::shared_ptr<CVarManagerWrapper> _globalCvarManager;
 void RLCustomHud::onLoad()
 {
 	_globalCvarManager = cvarManager;
+	thicknessSharedPtr = std::make_shared<float>(10);
+
+	cvarManager->registerCvar("thickness", "10", "Thickess", true, true, 1, true, 50, true).bindTo(thicknessSharedPtr);
+	cvarManager->getCvar("thickness").addOnValueChanged(
+		[this](std::string oldValue, CVarWrapper cvar) {
+			//cvar.getFloatValue();
+		});
 	
 	gameWrapper->SetTimeout([this](GameWrapper* gameWrapper) {
 		cvarManager->executeCommand("togglemenu " + GetMenuName());
-		}, 1);
+	}, 1);
 
 	gameWrapper->HookEvent("Function Engine.GameViewportClient.Tick", bind(&RLCustomHud::OnTick, this, std::placeholders::_1));
 	gameWrapper->HookEventWithCaller<CarWrapper>("Function TAGame.Car_TA.SetVehicleInput", 
@@ -137,7 +144,8 @@ void RLCustomHud::RenderImGui()
 
 	//if (inputs != nullptr)
 	{
-		float thickness = 10;
+		//float thickness = 10;
+		float thickness = *thicknessSharedPtr.get();
 		float gap = windowWith * 0.05f;
 		float arcSize = windowWith * 0.2f;
 		pointsLeftAirRoll.clear();
@@ -330,3 +338,17 @@ void RLCustomHud::Render()
 //		_globalCvarManager->executeCommand("togglemenu " + GetMenuName());
 //	}
 //}
+
+
+void RLCustomHud::RenderSettings() {
+	ImGui::TextUnformatted("A plugin to show a custom HUD");
+
+	CVarWrapper thicknessCvar = cvarManager->getCvar("thickness");
+	float thickness = thicknessCvar.getFloatValue();
+	if (ImGui::SliderFloat("Thickness", &thickness, 1, 70))
+		thicknessCvar.setValue(thickness);
+}
+
+std::string RLCustomHud::GetPluginName() {
+	return "RLCustomHUD";
+}

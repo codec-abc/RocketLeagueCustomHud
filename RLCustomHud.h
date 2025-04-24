@@ -21,12 +21,13 @@ constexpr auto plugin_version = stringify(VERSION_MAJOR) "." stringify(VERSION_M
 #define PURPLE ImColor(128, 0, 128, 255)
 
 
-class RLCustomHud: public BakkesMod::Plugin::BakkesModPlugin, public BakkesMod::Plugin::PluginWindow // , SettingsWindowBase
+class RLCustomHud: public BakkesMod::Plugin::BakkesModPlugin, public BakkesMod::Plugin::PluginSettingsWindow, public BakkesMod::Plugin::PluginWindow
 	//,public SettingsWindowBase // Uncomment if you wanna render your own tab in the settings menu
 	//,public PluginWindowBase // Uncomment if you want to render your own plugin window
 {
 
 	std::shared_ptr<bool> enabled;
+	std::shared_ptr<float> thicknessSharedPtr;
 
 	//Boilerplate
 	//void onUnload() override; // Uncomment and implement if you need a unload method
@@ -38,6 +39,8 @@ class RLCustomHud: public BakkesMod::Plugin::BakkesModPlugin, public BakkesMod::
 	std::vector<ImVec2> pointsRightAirRoll;
 	std::vector<ImColor> colormap;
 	ControllerInput inputs;
+
+
 
 public:
 	//void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu
@@ -66,6 +69,12 @@ public:
 
 	virtual void OnClose() override;
 	void RenderImGui();
+
+
+
+	virtual void RenderSettings() override;
+	virtual std::string GetPluginName() override;
+
 
 	float transparency = 0.2f;
 	int type = 0;
