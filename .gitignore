@@ -396,3 +396,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+plugins/RLCustomHud.lib
+plugins/RLCustomHud.exp
+plugins/RLCustomHud.dll
