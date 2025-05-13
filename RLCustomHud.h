@@ -39,8 +39,8 @@ class RLCustomHud: public BakkesMod::Plugin::BakkesModPlugin, public BakkesMod::
 	std::vector<ImVec2> pointsRightAirRoll;
 	std::vector<ImColor> colormap;
 	ControllerInput inputs;
-
-
+	ImFont* fontPointer = nullptr;
+	int exitCase = -1;
 
 public:
 	//void RenderSettings() override; // Uncomment if you wanna render your own tab in the settings menu

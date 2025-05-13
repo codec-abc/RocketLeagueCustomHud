@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "RLCustomHud.h"
+#include "IMGUIFont.h"
 #include <cmath>
 
 BAKKESMOD_PLUGIN(RLCustomHud, "RL Custom Hud", plugin_version, 0)
@@ -26,6 +27,9 @@ void RLCustomHud::onLoad()
 		std::bind(&RLCustomHud::OnSetInput, this, std::placeholders::_1, std::placeholders::_2));
 
 	colormap = getBMPYColorMap();
+
+	float fontSize = 60;
+	fontPointer = IMGUIFont::LoadFont(IMGUIFont::RobotoMono_Medium, fontSize);
 }
 
 void RLCustomHud::RenderWindow()
@@ -66,8 +70,6 @@ void RLCustomHud::OnSetInput(CarWrapper cw, void* params)
 	inputs = (ControllerInput)*ci;
 }
 
-
-
 void RLCustomHud::OnTick(std::string eventName)
 {
 	//std::ofstream outfile;
@@ -80,14 +82,10 @@ void RLCustomHud::OnTick(std::string eventName)
 	if (!car.IsNull()) {
 		inputs = car.GetInput();
 	}
-
-
 }
 
 void RLCustomHud::RenderImGui()
 {
-
-	//const auto directionalAirRoll = gameWrapper->IsKeyPressed(airRollKeyIndex);
 
 	// Compute time since registering started
 	//const auto time = to_string((system_clock::now() - startingPoint).count());
@@ -109,7 +107,7 @@ void RLCustomHud::RenderImGui()
 	int windowHeight = 800;
 	ImVec2 windowSize = ImVec2(windowWith, windowHeight);
 
-	if (size == 1) 
+	if (size == 1)
 	{
 		windowSize.x -= 16;
 		windowSize.y -= 32;
@@ -117,9 +115,9 @@ void RLCustomHud::RenderImGui()
 
 	ImGui::SetNextWindowSize(windowSize);
 
-	ImGuiWindowFlags windowFlags = 
-		ImGuiWindowFlags_NoCollapse | 
-		ImGuiWindowFlags_NoResize | 
+	ImGuiWindowFlags windowFlags =
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoResize |
 		ImGuiWindowFlags_NoTitleBar;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
@@ -127,13 +125,9 @@ void RLCustomHud::RenderImGui()
 
 	ImVec2 cursorPosition = ImGui::GetCursorPos();
 
-	if (size == 1) {
-		ImGuiIO io = ImGui::GetIO();
-
-		if (io.Fonts->Fonts.size() >= 1) {
-			ImFont* font = io.Fonts->Fonts[1];
-			ImGui::PushFont(font);
-		}
+	if (fontPointer != nullptr)
+	{
+		ImGui::PushFont(fontPointer);
 	}
 
 	ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -269,7 +263,8 @@ void RLCustomHud::RenderImGui()
 
 	font->FontSize = oldSize;
 
-	if (size == 1) {
+	if (fontPointer != nullptr)
+	{
 		ImGui::PopFont();
 	}
 

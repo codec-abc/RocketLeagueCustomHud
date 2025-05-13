@@ -91,6 +91,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ColormapLaoder.cpp" />
+    <ClCompile Include="IMGUIFont.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imguivariouscontrols.cpp" />
     <ClCompile Include="imgui\imgui_additions.cpp" />
@@ -111,6 +113,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colormap.h" />
+    <ClInclude Include="ColormapLaoder.h" />
+    <ClInclude Include="IMGUIFont.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imguivariouscontrols.h" />
@@ -127,11 +131,129 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="logging.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="RLCustomHud.h" />
     <ClInclude Include="version.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RLCustomHud.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Fonts\RobotoMono-Bold.ttf" />
+    <Font Include="Fonts\RobotoMono-BoldItalic.ttf" />
+    <Font Include="Fonts\RobotoMono-ExtraLight.ttf" />
+    <Font Include="Fonts\RobotoMono-ExtraLightItalic.ttf" />
+    <Font Include="Fonts\RobotoMono-Italic.ttf" />
+    <Font Include="Fonts\RobotoMono-Light.ttf" />
+    <Font Include="Fonts\RobotoMono-LightItalic.ttf" />
+    <Font Include="Fonts\RobotoMono-Medium.ttf" />
+    <Font Include="Fonts\RobotoMono-MediumItalic.ttf" />
+    <Font Include="Fonts\RobotoMono-Regular.ttf" />
+    <Font Include="Fonts\RobotoMono-SemiBold.ttf" />
+    <Font Include="Fonts\RobotoMono-SemiBoldItalic.ttf" />
+    <Font Include="Fonts\RobotoMono-Thin.ttf" />
+    <Font Include="Fonts\RobotoMono-ThinItalic.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Colormaps\circle_mgbm_67_c31_n256.csv" />
+    <None Include="Colormaps\circle_mgbm_67_c31_n256_s25.csv" />
+    <None Include="Colormaps\cyclic-protanopic-deuteranopic_bwyk_16-96_c31_n256.csv" />
+    <None Include="Colormaps\cyclic-protanopic-deuteranopic_wywb_55-96_c33_n256.csv" />
+    <None Include="Colormaps\cyclic-tritanopic_cwrk_40-100_c20_n256.csv" />
+    <None Include="Colormaps\cyclic-tritanopic_wrwc_70-100_c20_n256.csv" />
+    <None Include="Colormaps\cyclic_bgrmb_35-70_c75_n256.csv" />
+    <None Include="Colormaps\cyclic_bgrmb_35-70_c75_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_grey_15-85_c0_n256.csv" />
+    <None Include="Colormaps\cyclic_grey_15-85_c0_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_mrybm_35-75_c68_n256.csv" />
+    <None Include="Colormaps\cyclic_mrybm_35-75_c68_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_mybm_20-100_c48_n256.csv" />
+    <None Include="Colormaps\cyclic_mybm_20-100_c48_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_mygbm_30-95_c78_n256.csv" />
+    <None Include="Colormaps\cyclic_mygbm_30-95_c78_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_mygbm_50-90_c46_n256.csv" />
+    <None Include="Colormaps\cyclic_mygbm_50-90_c46_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_rygcbmr_50-90_c64_n256.csv" />
+    <None Include="Colormaps\cyclic_rygcbmr_50-90_c64_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_wrkbw_10-90_c43_n256.csv" />
+    <None Include="Colormaps\cyclic_wrkbw_10-90_c43_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_wrwbw_40-90_c42_n256.csv" />
+    <None Include="Colormaps\cyclic_wrwbw_40-90_c42_n256_s25.csv" />
+    <None Include="Colormaps\cyclic_ymcgy_60-90_c67_n256.csv" />
+    <None Include="Colormaps\cyclic_ymcgy_60-90_c67_n256_s25.csv" />
+    <None Include="Colormaps\diverging-isoluminant_cjm_75_c23_n256.csv" />
+    <None Include="Colormaps\diverging-isoluminant_cjm_75_c24_n256.csv" />
+    <None Include="Colormaps\diverging-isoluminant_cjo_70_c25_n256.csv" />
+    <None Include="Colormaps\diverging-linear-protanopic-deuteranopic_bjy_57-89_c34_n256.csv" />
+    <None Include="Colormaps\diverging-linear_bjr_30-55_c53_n256.csv" />
+    <None Include="Colormaps\diverging-linear_bjy_30-90_c45_n256.csv" />
+    <None Include="Colormaps\diverging-protanopic-deuteranopic_bwy_60-95_c32_n256.csv" />
+    <None Include="Colormaps\diverging-rainbow_bgymr_45-85_c67_n256.csv" />
+    <None Include="Colormaps\diverging-tritanopic_cwr_75-98_c20_n256.csv" />
+    <None Include="Colormaps\diverging_bkr_55-10_c35_n256.csv" />
+    <None Include="Colormaps\diverging_bky_60-10_c30_n256.csv" />
+    <None Include="Colormaps\diverging_bwg_20-95_c41_n256.csv" />
+    <None Include="Colormaps\diverging_bwr_20-95_c54_n256.csv" />
+    <None Include="Colormaps\diverging_bwr_40-95_c42_n256.csv" />
+    <None Include="Colormaps\diverging_bwr_55-98_c37_n256.csv" />
+    <None Include="Colormaps\diverging_cwm_80-100_c22_n256.csv" />
+    <None Include="Colormaps\diverging_gkr_60-10_c40_n256.csv" />
+    <None Include="Colormaps\diverging_gwr_55-95_c38_n256.csv" />
+    <None Include="Colormaps\diverging_gwv_55-95_c39_n256.csv" />
+    <None Include="Colormaps\glasbey_bw_minc_20_hue_150_280_n256.csv" />
+    <None Include="Colormaps\glasbey_bw_minc_20_hue_330_100_n256.csv" />
+    <None Include="Colormaps\glasbey_bw_minc_20_maxl_70_n256.csv" />
+    <None Include="Colormaps\glasbey_bw_minc_20_minl_30_n256.csv" />
+    <None Include="Colormaps\glasbey_bw_minc_20_n256.csv" />
+    <None Include="Colormaps\glasbey_bw_n256.csv" />
+    <None Include="Colormaps\glasbey_category10_n256.csv" />
+    <None Include="Colormaps\glasbey_hv_n256.csv" />
+    <None Include="Colormaps\isoluminant_cgo_70_c39_n256.csv" />
+    <None Include="Colormaps\isoluminant_cgo_80_c38_n256.csv" />
+    <None Include="Colormaps\isoluminant_cm_70_c39_n256.csv" />
+    <None Include="Colormaps\linear-protanopic-deuteranopic_kbjyw_5-95_c25_n256.csv" />
+    <None Include="Colormaps\linear-protanopic-deuteranopic_kbw_5-95_c34_n256.csv" />
+    <None Include="Colormaps\linear-protanopic-deuteranopic_kbw_5-98_c40_n256.csv" />
+    <None Include="Colormaps\linear-protanopic-deuteranopic_kyw_5-95_c49_n256.csv" />
+    <None Include="Colormaps\linear-tritanopic_kcw_5-95_c22_n256.csv" />
+    <None Include="Colormaps\linear-tritanopic_krjcw_5-95_c24_n256.csv" />
+    <None Include="Colormaps\linear-tritanopic_krjcw_5-98_c46_n256.csv" />
+    <None Include="Colormaps\linear-tritanopic_krw_5-95_c46_n256.csv" />
+    <None Include="Colormaps\linear_bgyw_15-100_c67_n256.csv" />
+    <None Include="Colormaps\linear_bgyw_15-100_c68_n256.csv" />
+    <None Include="Colormaps\linear_bgyw_20-98_c66_n256.csv" />
+    <None Include="Colormaps\linear_bgy_10-95_c74_n256.csv" />
+    <None Include="Colormaps\linear_blue_95-50_c20_n256.csv" />
+    <None Include="Colormaps\linear_bmw_5-95_c86_n256.csv" />
+    <None Include="Colormaps\linear_bmw_5-95_c89_n256.csv" />
+    <None Include="Colormaps\linear_bmy_10-95_c71_n256.csv" />
+    <None Include="Colormaps\linear_bmy_10-95_c78_n256.csv" />
+    <None Include="Colormaps\linear_gow_60-85_c27_n256.csv" />
+    <None Include="Colormaps\linear_gow_65-90_c35_n256.csv" />
+    <None Include="Colormaps\linear_grey_0-100_c0_n256.csv" />
+    <None Include="Colormaps\linear_grey_10-95_c0_n256.csv" />
+    <None Include="Colormaps\linear_kbc_5-95_c73_n256.csv" />
+    <None Include="Colormaps\linear_kbgoy_20-95_c57_n256.csv" />
+    <None Include="Colormaps\linear_kbgyw_10-98_c63_n256.csv" />
+    <None Include="Colormaps\linear_kbgyw_5-98_c62_n256.csv" />
+    <None Include="Colormaps\linear_kgy_5-95_c69_n256.csv" />
+    <None Include="Colormaps\linear_kryw_0-100_c71_n256.csv" />
+    <None Include="Colormaps\linear_kryw_5-100_c64_n256.csv" />
+    <None Include="Colormaps\linear_kryw_5-100_c67_n256.csv" />
+    <None Include="Colormaps\linear_kry_0-97_c73_n256.csv" />
+    <None Include="Colormaps\linear_kry_5-95_c72_n256.csv" />
+    <None Include="Colormaps\linear_kry_5-98_c75_n256.csv" />
+    <None Include="Colormaps\linear_ternary-blue_0-44_c57_n256.csv" />
+    <None Include="Colormaps\linear_ternary-green_0-46_c42_n256.csv" />
+    <None Include="Colormaps\linear_ternary-red_0-50_c52_n256.csv" />
+    <None Include="Colormaps\linear_wcmr_100-45_c42_n256.csv" />
+    <None Include="Colormaps\linear_worb_100-25_c53_n256.csv" />
+    <None Include="Colormaps\linear_wyor_100-45_c55_n256.csv" />
+    <None Include="Colormaps\rainbow_bgyrm_35-85_c69_n256.csv" />
+    <None Include="Colormaps\rainbow_bgyrm_35-85_c71_n256.csv" />
+    <None Include="Colormaps\rainbow_bgyr_10-90_c83_n256.csv" />
+    <None Include="Colormaps\rainbow_bgyr_35-85_c72_n256.csv" />
+    <None Include="Colormaps\rainbow_bgyr_35-85_c73_n256.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
