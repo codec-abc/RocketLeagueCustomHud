@@ -6,8 +6,8 @@
 
 ImFont* IMGUIFont::LoadFont(FontName fontname, float fontSize)
 {
+	// Load content from dll
 	HMODULE hModule = NULL;
-
 	bool isModuleFound = GetModuleHandleEx(
 		GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
 		GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
@@ -26,6 +26,8 @@ ImFont* IMGUIFont::LoadFont(FontName fontname, float fontSize)
 		return nullptr;
 	}
 	void* pMyBinaryData = ::LockResource(myResourceData);
+
+	// build font from IMGUI
 	ImGuiIO& io = ImGui::GetIO();
 	ImFontConfig config;
 	config.FontDataOwnedByAtlas = false;

@@ -91,7 +91,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ColormapLaoder.cpp" />
+    <ClCompile Include="ColorMap.cpp" />
     <ClCompile Include="IMGUIFont.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imguivariouscontrols.cpp" />
@@ -113,7 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colormap.h" />
-    <ClInclude Include="ColormapLaoder.h" />
+    <ClInclude Include="ColorMap.h" />
     <ClInclude Include="IMGUIFont.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />

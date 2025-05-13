@@ -1,301 +1,114 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-
-#include "pch.h"
-
-
 #pragma once
-// Linear interpolation between two colors
-ImColor interpolateColor(const ImColor& c1, const ImColor& c2, float t) {
-    float c1r = c1.Value.x;
-    float c1g = c1.Value.y;
-    float c1b = c1.Value.z;
-    
-    float c2r = c2.Value.x;
-    float c2g = c2.Value.y;
-    float c2b = c2.Value.z;
+class ColorMap
+{
+public:
+	// see https://colorcet.holoviz.org/user_guide/index.html
+	enum ColorMapName
+	{
+		circle_mgbm_67_c31_n256 = 115,
+		circle_mgbm_67_c31_n256_s25 = 116,
+		cyclic_bgrmb_35_70_c75_n256 = 117,
+		cyclic_bgrmb_35_70_c75_n256_s25 = 118,
+		cyclic_grey_15_85_c0_n256 = 119,
+		cyclic_grey_15_85_c0_n256_s25 = 120,
+		cyclic_mrybm_35_75_c68_n256 = 121,
+		cyclic_mrybm_35_75_c68_n256_s25 = 122,
+		cyclic_mybm_20_100_c48_n256 = 123,
+		cyclic_mybm_20_100_c48_n256_s25 = 124,
+		cyclic_mygbm_30_95_c78_n256 = 125,
+		cyclic_mygbm_30_95_c78_n256_s25 = 126,
+		cyclic_mygbm_50_90_c46_n256 = 127,
+		cyclic_mygbm_50_90_c46_n256_s25 = 128,
+		cyclic_rygcbmr_50_90_c64_n256 = 129,
+		cyclic_rygcbmr_50_90_c64_n256_s25 = 130,
+		cyclic_wrkbw_10_90_c43_n256 = 131,
+		cyclic_wrkbw_10_90_c43_n256_s25 = 132,
+		cyclic_wrwbw_40_90_c42_n256 = 133,
+		cyclic_wrwbw_40_90_c42_n256_s25 = 134,
+		cyclic_ymcgy_60_90_c67_n256 = 135,
+		cyclic_ymcgy_60_90_c67_n256_s25 = 136,
+		cyclic_protanopic_deuteranopic_bwyk_16_96_c31_n256 = 137,
+		cyclic_protanopic_deuteranopic_wywb_55_96_c33_n256 = 138,
+		cyclic_tritanopic_cwrk_40_100_c20_n256 = 139,
+		cyclic_tritanopic_wrwc_70_100_c20_n256 = 140,
+		diverging_bkr_55_10_c35_n256 = 141,
+		diverging_bky_60_10_c30_n256 = 142,
+		diverging_bwg_20_95_c41_n256 = 143,
+		diverging_bwr_20_95_c54_n256 = 144,
+		diverging_bwr_40_95_c42_n256 = 145,
+		diverging_bwr_55_98_c37_n256 = 146,
+		diverging_cwm_80_100_c22_n256 = 147,
+		diverging_gkr_60_10_c40_n256 = 148,
+		diverging_gwr_55_95_c38_n256 = 149,
+		diverging_gwv_55_95_c39_n256 = 150,
+		diverging_isoluminant_cjm_75_c23_n256 = 151,
+		diverging_isoluminant_cjm_75_c24_n256 = 152,
+		diverging_isoluminant_cjo_70_c25_n256 = 153,
+		diverging_linear_bjr_30_55_c53_n256 = 154,
+		diverging_linear_bjy_30_90_c45_n256 = 155,
+		diverging_linear_protanopic_deuteranopic_bjy_57_89_c34_n256 = 156,
+		diverging_protanopic_deuteranopic_bwy_60_95_c32_n256 = 157,
+		diverging_rainbow_bgymr_45_85_c67_n256 = 158,
+		diverging_tritanopic_cwr_75_98_c20_n256 = 159,
+		glasbey_bw_minc_20_hue_150_280_n256 = 160,
+		glasbey_bw_minc_20_hue_330_100_n256 = 161,
+		glasbey_bw_minc_20_maxl_70_n256 = 162,
+		glasbey_bw_minc_20_minl_30_n256 = 163,
+		glasbey_bw_minc_20_n256 = 164,
+		glasbey_bw_n256 = 165,
+		glasbey_category10_n256 = 166,
+		glasbey_hv_n256 = 167,
+		isoluminant_cgo_70_c39_n256 = 168,
+		isoluminant_cgo_80_c38_n256 = 169,
+		isoluminant_cm_70_c39_n256 = 170,
+		linear_bgy_10_95_c74_n256 = 171,
+		linear_bgyw_15_100_c67_n256 = 172,
+		linear_bgyw_15_100_c68_n256 = 173,
+		linear_bgyw_20_98_c66_n256 = 174,
+		linear_blue_95_50_c20_n256 = 175,
+		linear_bmw_5_95_c86_n256 = 176,
+		linear_bmw_5_95_c89_n256 = 177,
+		linear_bmy_10_95_c71_n256 = 178,
+		linear_bmy_10_95_c78_n256 = 179,
+		linear_gow_60_85_c27_n256 = 180,
+		linear_gow_65_90_c35_n256 = 181,
+		linear_grey_0_100_c0_n256 = 182,
+		linear_grey_10_95_c0_n256 = 183,
+		linear_kbc_5_95_c73_n256 = 184,
+		linear_kbgoy_20_95_c57_n256 = 185,
+		linear_kbgyw_5_98_c62_n256 = 186,
+		linear_kbgyw_10_98_c63_n256 = 187,
+		linear_kgy_5_95_c69_n256 = 188,
+		linear_kry_0_97_c73_n256 = 189,
+		linear_kry_5_95_c72_n256 = 190,
+		linear_kry_5_98_c75_n256 = 191,
+		linear_kryw_0_100_c71_n256 = 192,
+		linear_kryw_5_100_c64_n256 = 193,
+		linear_kryw_5_100_c67_n256 = 194,
+		linear_ternary_blue_0_44_c57_n256 = 195,
+		linear_ternary_green_0_46_c42_n256 = 196,
+		linear_ternary_red_0_50_c52_n256 = 197,
+		linear_wcmr_100_45_c42_n256 = 198,
+		linear_worb_100_25_c53_n256 = 199,
+		linear_wyor_100_45_c55_n256 = 200,
+		linear_protanopic_deuteranopic_kbjyw_5_95_c25_n256 = 201,
+		linear_protanopic_deuteranopic_kbw_5_95_c34_n256 = 202,
+		linear_protanopic_deuteranopic_kbw_5_98_c40_n256 = 203,
+		linear_protanopic_deuteranopic_kyw_5_95_c49_n256 = 204,
+		linear_tritanopic_kcw_5_95_c22_n256 = 205,
+		linear_tritanopic_krjcw_5_95_c24_n256 = 206,
+		linear_tritanopic_krjcw_5_98_c46_n256 = 207,
+		linear_tritanopic_krw_5_95_c46_n256 = 208,
+		rainbow_bgyr_10_90_c83_n256 = 209,
+		rainbow_bgyr_35_85_c72_n256 = 210,
+		rainbow_bgyr_35_85_c73_n256 = 211,
+		rainbow_bgyrm_35_85_c69_n256 = 212,
+		rainbow_bgyrm_35_85_c71_n256 = 213,
+	};
 
-    float r = c1r + (c2r - c1r) * t;
-    float g = c1g + (c2g - c1g) * t;
-    float b = c1b + (c2b - c1b) * t;
-    return ImColor(r, g, b);
-}
+	static std::vector<ImColor> LoadColorMap(ColorMapName colormapName);
+	static ImColor SampleColorMap(float t, std::vector<ImColor>& colorMap);
+private:
+	static ImColor InterpolateColor(const ImColor& c1, const ImColor& c2, float t);
+};
 
-ImColor sampleColorMap(float t, std::vector<ImColor>& colorMap) {
-    // Clamp t
-    t = std::clamp(t, 0.0f, 1.0f);
-
-    float scaledT = t * (colorMap.size() - 1);
-    int index = static_cast<int>(std::floor(scaledT));
-    float localT = scaledT - index;
-
-    if (index >= static_cast<int>(colorMap.size()) - 1)
-    {
-        return colorMap.back();
-    }
-
-    return interpolateColor(colorMap[index], colorMap[index + 1], localT);
-}
-
-std::vector<ImColor> getBMPYColorMap() {
-    std::vector<ImColor> returned;
-    returned.push_back(ImColor(0.0018068f, 0.058001f, 0.36399));
-    returned.push_back(ImColor(0.0024107f, 0.059964f, 0.37048));
-    returned.push_back(ImColor(0.0031987f, 0.061692f, 0.37697));
-    returned.push_back(ImColor(0.0042843f, 0.063571f, 0.38341));
-    returned.push_back(ImColor(0.0057638f, 0.065341f, 0.38979));
-    returned.push_back(ImColor(0.0075093f, 0.067136f, 0.39617));
-    returned.push_back(ImColor(0.0097084f, 0.068953f, 0.40248));
-    returned.push_back(ImColor(0.012532f, 0.070615f, 0.40875));
-    returned.push_back(ImColor(0.0155f, 0.07232f, 0.41499));
-    returned.push_back(ImColor(0.019067f, 0.074062f, 0.42116));
-    returned.push_back(ImColor(0.023134f, 0.075673f, 0.42729));
-    returned.push_back(ImColor(0.027668f, 0.077301f, 0.43336));
-    returned.push_back(ImColor(0.032903f, 0.078925f, 0.43937));
-    returned.push_back(ImColor(0.038954f, 0.080546f, 0.44532));
-    returned.push_back(ImColor(0.045181f, 0.082169f, 0.45122));
-    returned.push_back(ImColor(0.051521f, 0.083668f, 0.45704));
-    returned.push_back(ImColor(0.058053f, 0.085134f, 0.46278));
-    returned.push_back(ImColor(0.06473f, 0.086625f, 0.46847));
-    returned.push_back(ImColor(0.071444f, 0.088071f, 0.47409));
-    returned.push_back(ImColor(0.078236f, 0.089456f, 0.4796));
-    returned.push_back(ImColor(0.085243f, 0.090814f, 0.48502));
-    returned.push_back(ImColor(0.092333f, 0.092133f, 0.49038));
-    returned.push_back(ImColor(0.099463f, 0.093353f, 0.49564));
-    returned.push_back(ImColor(0.10684f, 0.094646f, 0.50078));
-    returned.push_back(ImColor(0.11423f, 0.095771f, 0.50581));
-    returned.push_back(ImColor(0.12178f, 0.096854f, 0.51075));
-    returned.push_back(ImColor(0.12948f, 0.097993f, 0.51558));
-    returned.push_back(ImColor(0.13728f, 0.098973f, 0.52029));
-    returned.push_back(ImColor(0.14525f, 0.099911f, 0.52487));
-    returned.push_back(ImColor(0.1533f, 0.10078f, 0.5293));
-    returned.push_back(ImColor(0.16159f, 0.10159f, 0.53358));
-    returned.push_back(ImColor(0.16995f, 0.10233f, 0.53773));
-    returned.push_back(ImColor(0.17849f, 0.103f, 0.5417));
-    returned.push_back(ImColor(0.18715f, 0.10358f, 0.54552));
-    returned.push_back(ImColor(0.19599f, 0.10402f, 0.54915));
-    returned.push_back(ImColor(0.20499f, 0.10436f, 0.55259));
-    returned.push_back(ImColor(0.21418f, 0.10461f, 0.55582));
-    returned.push_back(ImColor(0.22355f, 0.10475f, 0.55884));
-    returned.push_back(ImColor(0.2331f, 0.10475f, 0.56162));
-    returned.push_back(ImColor(0.24286f, 0.10462f, 0.56415));
-    returned.push_back(ImColor(0.25285f, 0.10434f, 0.5664));
-    returned.push_back(ImColor(0.26305f, 0.10391f, 0.56836));
-    returned.push_back(ImColor(0.27348f, 0.10327f, 0.57));
-    returned.push_back(ImColor(0.28411f, 0.10237f, 0.5713));
-    returned.push_back(ImColor(0.29502f, 0.10125f, 0.57224));
-    returned.push_back(ImColor(0.30619f, 0.099883f, 0.57281));
-    returned.push_back(ImColor(0.31733f, 0.098383f, 0.57312));
-    returned.push_back(ImColor(0.32829f, 0.096731f, 0.57334));
-    returned.push_back(ImColor(0.33902f, 0.095191f, 0.57351));
-    returned.push_back(ImColor(0.34952f, 0.093473f, 0.57361));
-    returned.push_back(ImColor(0.35984f, 0.09185f, 0.57367));
-    returned.push_back(ImColor(0.36998f, 0.090102f, 0.57366));
-    returned.push_back(ImColor(0.37996f, 0.088354f, 0.5736));
-    returned.push_back(ImColor(0.38979f, 0.086567f, 0.57349));
-    returned.push_back(ImColor(0.39947f, 0.084774f, 0.57331));
-    returned.push_back(ImColor(0.40903f, 0.082914f, 0.57309));
-    returned.push_back(ImColor(0.41845f, 0.081085f, 0.5728));
-    returned.push_back(ImColor(0.42777f, 0.079164f, 0.57245));
-    returned.push_back(ImColor(0.43696f, 0.077258f, 0.57205));
-    returned.push_back(ImColor(0.44604f, 0.075373f, 0.57159));
-    returned.push_back(ImColor(0.45505f, 0.073529f, 0.57107));
-    returned.push_back(ImColor(0.46394f, 0.071572f, 0.57049));
-    returned.push_back(ImColor(0.47273f, 0.069648f, 0.56986));
-    returned.push_back(ImColor(0.48145f, 0.067661f, 0.56917));
-    returned.push_back(ImColor(0.49008f, 0.06569f, 0.56843));
-    returned.push_back(ImColor(0.49863f, 0.063767f, 0.56763));
-    returned.push_back(ImColor(0.5071f, 0.061792f, 0.56677));
-    returned.push_back(ImColor(0.51549f, 0.059971f, 0.56585));
-    returned.push_back(ImColor(0.52382f, 0.057948f, 0.56487));
-    returned.push_back(ImColor(0.53207f, 0.056175f, 0.56385));
-    returned.push_back(ImColor(0.54025f, 0.054286f, 0.56276));
-    returned.push_back(ImColor(0.54838f, 0.052493f, 0.5616));
-    returned.push_back(ImColor(0.55642f, 0.05079f, 0.5604));
-    returned.push_back(ImColor(0.56441f, 0.049208f, 0.55913));
-    returned.push_back(ImColor(0.57234f, 0.04752f, 0.55781));
-    returned.push_back(ImColor(0.58021f, 0.045977f, 0.55643));
-    returned.push_back(ImColor(0.588f, 0.044652f, 0.55502));
-    returned.push_back(ImColor(0.59575f, 0.043191f, 0.55358));
-    returned.push_back(ImColor(0.60343f, 0.042094f, 0.55214));
-    returned.push_back(ImColor(0.61104f, 0.040933f, 0.55067));
-    returned.push_back(ImColor(0.6186f, 0.039904f, 0.5492));
-    returned.push_back(ImColor(0.62609f, 0.039006f, 0.5477));
-    returned.push_back(ImColor(0.63354f, 0.038249f, 0.5462));
-    returned.push_back(ImColor(0.64092f, 0.037647f, 0.54466));
-    returned.push_back(ImColor(0.64826f, 0.037202f, 0.54313));
-    returned.push_back(ImColor(0.65554f, 0.036908f, 0.54156));
-    returned.push_back(ImColor(0.66278f, 0.036776f, 0.53999));
-    returned.push_back(ImColor(0.66996f, 0.036816f, 0.53841));
-    returned.push_back(ImColor(0.6771f, 0.037039f, 0.53681));
-    returned.push_back(ImColor(0.68417f, 0.037443f, 0.53518));
-    returned.push_back(ImColor(0.69122f, 0.038023f, 0.53354));
-    returned.push_back(ImColor(0.69821f, 0.038789f, 0.53189));
-    returned.push_back(ImColor(0.70517f, 0.039756f, 0.53022));
-    returned.push_back(ImColor(0.71207f, 0.040926f, 0.52854));
-    returned.push_back(ImColor(0.71894f, 0.042269f, 0.52684));
-    returned.push_back(ImColor(0.72576f, 0.043681f, 0.52511));
-    returned.push_back(ImColor(0.73255f, 0.045402f, 0.52338));
-    returned.push_back(ImColor(0.73929f, 0.047268f, 0.52162));
-    returned.push_back(ImColor(0.74598f, 0.049331f, 0.51985));
-    returned.push_back(ImColor(0.75264f, 0.051385f, 0.51807));
-    returned.push_back(ImColor(0.75926f, 0.053656f, 0.51626));
-    returned.push_back(ImColor(0.76585f, 0.056145f, 0.51445));
-    returned.push_back(ImColor(0.77239f, 0.058663f, 0.5126));
-    returned.push_back(ImColor(0.7789f, 0.061273f, 0.51075));
-    returned.push_back(ImColor(0.78537f, 0.064105f, 0.50888));
-    returned.push_back(ImColor(0.79179f, 0.067003f, 0.50698));
-    returned.push_back(ImColor(0.79815f, 0.07017f, 0.50503));
-    returned.push_back(ImColor(0.8044f, 0.073831f, 0.503));
-    returned.push_back(ImColor(0.81054f, 0.077734f, 0.50091));
-    returned.push_back(ImColor(0.81658f, 0.082182f, 0.49873));
-    returned.push_back(ImColor(0.82251f, 0.086838f, 0.49646));
-    returned.push_back(ImColor(0.82832f, 0.09184f, 0.49413));
-    returned.push_back(ImColor(0.83402f, 0.097033f, 0.49171));
-    returned.push_back(ImColor(0.83961f, 0.10255f, 0.48919));
-    returned.push_back(ImColor(0.8451f, 0.10821f, 0.48661));
-    returned.push_back(ImColor(0.85047f, 0.1141f, 0.48394));
-    returned.push_back(ImColor(0.85573f, 0.12016f, 0.48118));
-    returned.push_back(ImColor(0.86088f, 0.12639f, 0.47835));
-    returned.push_back(ImColor(0.86592f, 0.13272f, 0.47543));
-    returned.push_back(ImColor(0.87085f, 0.13913f, 0.47242));
-    returned.push_back(ImColor(0.87567f, 0.14574f, 0.46934));
-    returned.push_back(ImColor(0.88036f, 0.15236f, 0.46614));
-    returned.push_back(ImColor(0.88495f, 0.15912f, 0.46287));
-    returned.push_back(ImColor(0.88942f, 0.16592f, 0.45953));
-    returned.push_back(ImColor(0.89379f, 0.17282f, 0.45608));
-    returned.push_back(ImColor(0.89803f, 0.17978f, 0.45256));
-    returned.push_back(ImColor(0.90216f, 0.18681f, 0.44893));
-    returned.push_back(ImColor(0.90617f, 0.1939f, 0.44521));
-    returned.push_back(ImColor(0.91008f, 0.20098f, 0.44141));
-    returned.push_back(ImColor(0.91386f, 0.20817f, 0.43752));
-    returned.push_back(ImColor(0.91752f, 0.21538f, 0.43351));
-    returned.push_back(ImColor(0.92106f, 0.22265f, 0.42942));
-    returned.push_back(ImColor(0.92449f, 0.22991f, 0.42524));
-    returned.push_back(ImColor(0.9278f, 0.23727f, 0.42094));
-    returned.push_back(ImColor(0.93099f, 0.24459f, 0.41657));
-    returned.push_back(ImColor(0.93405f, 0.252f, 0.41209));
-    returned.push_back(ImColor(0.93701f, 0.25939f, 0.4076));
-    returned.push_back(ImColor(0.93986f, 0.26675f, 0.40316));
-    returned.push_back(ImColor(0.9426f, 0.27411f, 0.39879));
-    returned.push_back(ImColor(0.94522f, 0.28144f, 0.39449));
-    returned.push_back(ImColor(0.94774f, 0.28878f, 0.39026));
-    returned.push_back(ImColor(0.95015f, 0.29609f, 0.3861));
-    returned.push_back(ImColor(0.95245f, 0.30338f, 0.382));
-    returned.push_back(ImColor(0.95466f, 0.31069f, 0.37798));
-    returned.push_back(ImColor(0.95674f, 0.31797f, 0.37403));
-    returned.push_back(ImColor(0.95873f, 0.32523f, 0.37012));
-    returned.push_back(ImColor(0.96061f, 0.33251f, 0.36631));
-    returned.push_back(ImColor(0.96239f, 0.33976f, 0.36253));
-    returned.push_back(ImColor(0.96406f, 0.34701f, 0.35883));
-    returned.push_back(ImColor(0.96562f, 0.35425f, 0.35522));
-    returned.push_back(ImColor(0.96708f, 0.36148f, 0.35164));
-    returned.push_back(ImColor(0.96843f, 0.36871f, 0.34814));
-    returned.push_back(ImColor(0.96968f, 0.37593f, 0.3447));
-    returned.push_back(ImColor(0.97082f, 0.38315f, 0.34134));
-    returned.push_back(ImColor(0.97186f, 0.39036f, 0.33803));
-    returned.push_back(ImColor(0.9728f, 0.39757f, 0.33481));
-    returned.push_back(ImColor(0.97362f, 0.40476f, 0.33161));
-    returned.push_back(ImColor(0.97434f, 0.41197f, 0.32852));
-    returned.push_back(ImColor(0.97495f, 0.41917f, 0.32547));
-    returned.push_back(ImColor(0.97546f, 0.42636f, 0.32252));
-    returned.push_back(ImColor(0.97586f, 0.43355f, 0.31962));
-    returned.push_back(ImColor(0.97615f, 0.44074f, 0.31678));
-    returned.push_back(ImColor(0.97634f, 0.44792f, 0.31402));
-    returned.push_back(ImColor(0.97641f, 0.45512f, 0.31133));
-    returned.push_back(ImColor(0.97637f, 0.46229f, 0.30872));
-    returned.push_back(ImColor(0.97624f, 0.46947f, 0.30617));
-    returned.push_back(ImColor(0.97607f, 0.47658f, 0.30363));
-    returned.push_back(ImColor(0.97591f, 0.4836f, 0.30112));
-    returned.push_back(ImColor(0.97579f, 0.49054f, 0.29861));
-    returned.push_back(ImColor(0.97569f, 0.49738f, 0.2961));
-    returned.push_back(ImColor(0.97563f, 0.50413f, 0.29358));
-    returned.push_back(ImColor(0.97559f, 0.5108f, 0.29108));
-    returned.push_back(ImColor(0.97559f, 0.51739f, 0.28856));
-    returned.push_back(ImColor(0.97562f, 0.5239f, 0.28603));
-    returned.push_back(ImColor(0.97568f, 0.53035f, 0.28352));
-    returned.push_back(ImColor(0.97578f, 0.53672f, 0.28099));
-    returned.push_back(ImColor(0.9759f, 0.54302f, 0.27848));
-    returned.push_back(ImColor(0.97607f, 0.54926f, 0.27597));
-    returned.push_back(ImColor(0.97626f, 0.55543f, 0.27343));
-    returned.push_back(ImColor(0.97649f, 0.56155f, 0.2709));
-    returned.push_back(ImColor(0.97675f, 0.56761f, 0.26835));
-    returned.push_back(ImColor(0.97705f, 0.57361f, 0.26582));
-    returned.push_back(ImColor(0.97738f, 0.57956f, 0.26328));
-    returned.push_back(ImColor(0.97775f, 0.58545f, 0.26073));
-    returned.push_back(ImColor(0.97815f, 0.59129f, 0.25816));
-    returned.push_back(ImColor(0.97859f, 0.59708f, 0.25562));
-    returned.push_back(ImColor(0.97907f, 0.60282f, 0.25307));
-    returned.push_back(ImColor(0.97958f, 0.60852f, 0.25049));
-    returned.push_back(ImColor(0.98013f, 0.61416f, 0.24794));
-    returned.push_back(ImColor(0.98072f, 0.61978f, 0.24534));
-    returned.push_back(ImColor(0.98135f, 0.62534f, 0.24277));
-    returned.push_back(ImColor(0.98202f, 0.63087f, 0.24018));
-    returned.push_back(ImColor(0.98273f, 0.63635f, 0.23762));
-    returned.push_back(ImColor(0.98347f, 0.64177f, 0.23503));
-    returned.push_back(ImColor(0.98425f, 0.64718f, 0.23241));
-    returned.push_back(ImColor(0.98507f, 0.65256f, 0.22982));
-    returned.push_back(ImColor(0.98586f, 0.65793f, 0.22748));
-    returned.push_back(ImColor(0.98656f, 0.66331f, 0.22545));
-    returned.push_back(ImColor(0.98719f, 0.6687f, 0.22375));
-    returned.push_back(ImColor(0.98774f, 0.6741f, 0.22234));
-    returned.push_back(ImColor(0.98823f, 0.67951f, 0.22119));
-    returned.push_back(ImColor(0.98867f, 0.68493f, 0.22026));
-    returned.push_back(ImColor(0.98906f, 0.69035f, 0.21952));
-    returned.push_back(ImColor(0.98939f, 0.69578f, 0.21896));
-    returned.push_back(ImColor(0.98968f, 0.7012f, 0.2186));
-    returned.push_back(ImColor(0.98992f, 0.70664f, 0.2184));
-    returned.push_back(ImColor(0.99012f, 0.71207f, 0.21835));
-    returned.push_back(ImColor(0.99028f, 0.7175f, 0.21841));
-    returned.push_back(ImColor(0.9904f, 0.72292f, 0.21862));
-    returned.push_back(ImColor(0.99048f, 0.72836f, 0.21896));
-    returned.push_back(ImColor(0.99054f, 0.73379f, 0.2194));
-    returned.push_back(ImColor(0.99055f, 0.73922f, 0.21995));
-    returned.push_back(ImColor(0.99053f, 0.74463f, 0.22062));
-    returned.push_back(ImColor(0.99048f, 0.75005f, 0.22135));
-    returned.push_back(ImColor(0.9904f, 0.75548f, 0.22218));
-    returned.push_back(ImColor(0.99028f, 0.7609f, 0.22313));
-    returned.push_back(ImColor(0.99014f, 0.76631f, 0.22411));
-    returned.push_back(ImColor(0.98996f, 0.77172f, 0.22522));
-    returned.push_back(ImColor(0.98976f, 0.77714f, 0.22642));
-    returned.push_back(ImColor(0.98952f, 0.78254f, 0.22765));
-    returned.push_back(ImColor(0.98925f, 0.78794f, 0.22898));
-    returned.push_back(ImColor(0.98896f, 0.79335f, 0.23033));
-    returned.push_back(ImColor(0.98863f, 0.79874f, 0.23182));
-    returned.push_back(ImColor(0.98828f, 0.80414f, 0.2333));
-    returned.push_back(ImColor(0.9879f, 0.80953f, 0.23491));
-    returned.push_back(ImColor(0.98749f, 0.81492f, 0.23654));
-    returned.push_back(ImColor(0.98705f, 0.82031f, 0.23821));
-    returned.push_back(ImColor(0.98658f, 0.82569f, 0.23995));
-    returned.push_back(ImColor(0.98608f, 0.83108f, 0.24175));
-    returned.push_back(ImColor(0.98556f, 0.83646f, 0.24358));
-    returned.push_back(ImColor(0.98501f, 0.84184f, 0.24547));
-    returned.push_back(ImColor(0.98443f, 0.84721f, 0.24743));
-    returned.push_back(ImColor(0.98382f, 0.85258f, 0.2494));
-    returned.push_back(ImColor(0.98318f, 0.85795f, 0.25145));
-    returned.push_back(ImColor(0.98251f, 0.86332f, 0.25351));
-    returned.push_back(ImColor(0.98182f, 0.86869f, 0.25562));
-    returned.push_back(ImColor(0.98109f, 0.87405f, 0.25776));
-    returned.push_back(ImColor(0.98034f, 0.87941f, 0.25997));
-    returned.push_back(ImColor(0.97957f, 0.88477f, 0.26219));
-    returned.push_back(ImColor(0.97875f, 0.89012f, 0.26445));
-    returned.push_back(ImColor(0.97792f, 0.89548f, 0.26675));
-    returned.push_back(ImColor(0.97705f, 0.90083f, 0.26909));
-    returned.push_back(ImColor(0.97615f, 0.90619f, 0.27144));
-    returned.push_back(ImColor(0.97523f, 0.91153f, 0.27384));
-    returned.push_back(ImColor(0.97428f, 0.91688f, 0.27628));
-    returned.push_back(ImColor(0.9733f, 0.92223f, 0.27873));
-    returned.push_back(ImColor(0.97229f, 0.92756f, 0.2812));
-    returned.push_back(ImColor(0.97124f, 0.93291f, 0.28373));
-    returned.push_back(ImColor(0.97017f, 0.93825f, 0.28625));
-    returned.push_back(ImColor(0.96907f, 0.94359f, 0.28885));
-    returned.push_back(ImColor(0.96794f, 0.94893f, 0.29144));
-    returned.push_back(ImColor(0.96677f, 0.95427f, 0.29405));
-    returned.push_back(ImColor(0.96558f, 0.9596f, 0.29671));
-    returned.push_back(ImColor(0.96436f, 0.96493f, 0.29938));
-    returned.push_back(ImColor(0.9631f, 0.97026f, 0.30206));
-    returned.push_back(ImColor(0.96182f, 0.97559f, 0.30477));
-    return returned;
-}
