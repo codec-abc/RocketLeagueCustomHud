@@ -92,6 +92,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ColorMap.cpp" />
+    <ClCompile Include="easing.cpp" />
     <ClCompile Include="IMGUIFont.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imguivariouscontrols.cpp" />
@@ -114,6 +115,7 @@
   <ItemGroup>
     <ClInclude Include="colormap.h" />
     <ClInclude Include="ColorMap.h" />
+    <ClInclude Include="easing.h" />
     <ClInclude Include="IMGUIFont.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />

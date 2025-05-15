@@ -3,6 +3,7 @@
 #include "IMGUIFont.h"
 #include "ColorMap.h"
 #include <cmath>
+#include "easing.h"
 
 BAKKESMOD_PLUGIN(RLCustomHud, "RL Custom Hud", plugin_version, 0)
 
